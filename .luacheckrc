@@ -22,6 +22,7 @@ stds.computercraft = {
 			'getFuelLevel',
 			'getItemDetail',
 			'placeDown',
+			'refuel',
 			'select',
 			'transferTo',
 			'turnLeft',
@@ -34,6 +35,7 @@ stds.computercraft = {
 		os = f{
 			'getComputerLabel',
 			'setComputerLabel',
+			'sleep',
 		},
 		fs = f{
 			'isDir',
