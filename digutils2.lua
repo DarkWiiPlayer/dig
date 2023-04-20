@@ -169,6 +169,19 @@ function digutils2.every(n, func)
 	end
 end
 
+function digutils2.everyPersistent(n, func)
+	if func==nil then
+		error("Argument #2 missing: Expected function or callable", 2)
+	end
+	local counter = 0
+	return function()
+		counter = counter + 1
+		if counter % n == 0 then
+			func()
+		end
+	end
+end
+
 local function compact(i)
 	local current = turtle.getItemDetail(i)
 	turtle.select(i)

@@ -1,5 +1,5 @@
 local digutils2 = require 'digutils2'
---local junk = require 'junk'
+local junk = require 'junk'
 
 local direction = ...
 
@@ -31,12 +31,17 @@ local forward = {
 
 local stopheight = (height % 3) == 0 and height-1 or height
 
+local inventory = digutils2.everyPersistent(64, function()
+	junk:drop()
+	digutils2.compact()
+end)
+
 local function wall()
 	for z=3, height, 3 do
 		digutils2.up()
-		forward[3](width-1)
+		forward[3](width-1, inventory)
 		if z < height then
-			digutils2.up(2)
+			digutils2.up(2, inventory)
 		end
 		if z < height then
 			right() right()
@@ -45,7 +50,7 @@ local function wall()
 	local rem = height % 3
 	if rem > 0 then
 		digutils2.up(rem-1)
-		forward[rem](width-1)
+		forward[rem](width-1, inventory)
 	end
 	digutils2.down(stopheight-1)
 end
