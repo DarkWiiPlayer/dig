@@ -9,11 +9,11 @@ end
 
 local forward, back
 if direction == "up" then
-	forward, back = turtle.up(), turtle.down()
+	forward, back = turtle.up, turtle.down
 elseif direction == "down" then
-	forward, back = turtle.down(), turtle.up()
+	forward, back = turtle.down, turtle.up
 elseif direction == nil or direction == "forward" then
-	forward, back = turtle.forward(), turtle.back()
+	forward, back = turtle.forward, turtle.back
 else
 	error("unknown direction: " .. direction)
 end
