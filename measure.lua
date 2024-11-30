@@ -1,8 +1,7 @@
 local direction, length = ...
 
 if tonumber(direction) then
-	length = tonumber(direction)
-	direction = length
+	length, direction = tonumber(direction), length
 else
 	length = tonumber(length)
 end
