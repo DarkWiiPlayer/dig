@@ -4,6 +4,7 @@ local files = {
 	"junk",
 	-- Executables
 	"branch",
+	"column",
 	"install",
 	"quarry",
 	"refuel",
