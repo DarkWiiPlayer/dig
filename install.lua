@@ -6,6 +6,7 @@ local files = {
 	"branch",
 	"column",
 	"install",
+	"measure",
 	"quarry",
 	"refuel",
 	"room",
