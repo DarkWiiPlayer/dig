@@ -27,6 +27,7 @@ else
 	while forward() do
 		length = length + 1
 	end
+	print("Measured " .. length .. " blocks.")
 	for _ = 1, length do
 		back()
 	end
