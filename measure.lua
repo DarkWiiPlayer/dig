@@ -22,7 +22,7 @@ if length then
 		forward()
 	end
 else
-	length = 0
+	length = 1
 	while forward() do
 		length = length + 1
 	end
