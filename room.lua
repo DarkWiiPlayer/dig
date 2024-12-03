@@ -29,7 +29,7 @@ local width = digutils2.ask("Width", "number")
 --- @type number
 local height = digutils2.ask("Height", "number")
 
---- @type fun(distance: number, callback: fun())[]
+--- @type fun(distance: number|nil, callback: fun()|nil)[]
 local forward = {
 	digutils2.forward,
 	digutils2.forward2d,
@@ -66,10 +66,15 @@ end
 
 digutils2.forward()
 
+--- Whether the room layout has been mirrored to save turns
+--- @type boolean
+local inverted = false
+
 -- Optimisation to reduce turns
 if length > width then
 	left, right = right, left
 	width, length = length, width
+	inverted = true
 else
 	right()
 end
@@ -90,15 +95,17 @@ for x = 1, length do
 	local turn = (even_height or x % 2 == 0) and right or left
 	if x < length then
 		turn()
-		digutils2.forward()
+		forward[1]()
 		turn()
 	else
 		if not same_final_side then
 			left()
 			left()
-			digutils2.forward(width)
+			forward[1](width-1)
 		end
 		left()
-		digutils2.forward(length)
+		forward[1](length-1)
+		if inverted then right() end
+		forward[1]()
 	end
 end
