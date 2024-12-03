@@ -20,33 +20,35 @@ local forward = {
 	digutils2.forward3
 }
 
+local inventory = digutils2.everyPersistent(64, function()
+	junk:drop()
+	digutils2.compact()
+end)
+
 local function layer(n)
+	if n < 1 then return end
 	digutils2.down(n==3 and 2 or 1)
 	for y=1, width do
-		forward[n](length-1)
+		forward[n](length-1, inventory)
 		if y < width then
-			local turn = y%2==1 and right or left
+			local turn = (y % 2 == 1) and right or left
 			turn()
 			forward[n]()
 			turn()
 		end
 	end
-	junk:drop()
-	digutils2.compact()
 	digutils2.down()
 end
 
-for _=3, depth, 3 do
+for _ = 3, depth, 3 do
 	layer(3)
 	right()
-	if width % 2 == 1 then
-		right()
+	if width % 2 == 0 then
+		forward[1](width)
 	end
+	right()
 end
 
-local rem = depth % 3
-if rem > 0 then
-	layer(depth % 3)
-end
+layer(depth % 3)
 
 digutils2.up(depth+1)
