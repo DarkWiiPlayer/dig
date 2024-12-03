@@ -3,32 +3,41 @@ local junk = require 'junk'
 
 local direction = ...
 
+--- Turns 90 degrees to the left
+--- @type fun()
 local left = turtle.turnLeft
+
+--- Turns 90 degrees to the right
+--- @type fun()
 local right = turtle.turnRight
 
 if direction == "left" then
 	left, right = right, left
 end
 
-local length = digutils2.ask("Length", "number")
-local width = digutils2.ask("Width", "number")
-local height = digutils2.ask("Height", "number")
-
-digutils2.forward()
-
--- Optimisation to reduce turns
-if length > width then
-	right()
-	left, right = right, left
-	width, length = length, width
+--- @param a boolean
+--- @param b boolean
+--- @return boolean
+local function xor(a, b)
+	return (a or b) and not (a and b)
 end
 
+--- @type number
+local length = digutils2.ask("Length", "number")
+--- @type number
+local width = digutils2.ask("Width", "number")
+--- @type number
+local height = digutils2.ask("Height", "number")
+
+--- @type fun(distance: number, callback: fun())[]
 local forward = {
 	digutils2.forward,
 	digutils2.forward2d,
 	digutils2.forward3
 }
 
+--- What height the turtle will be at after finishing a layer
+--- @type number
 local stopheight = (height % 3) == 0 and height-1 or height
 
 local inventory = digutils2.everyPersistent(64, function()
@@ -55,19 +64,41 @@ local function wall()
 	digutils2.down(stopheight-1)
 end
 
-local even = math.ceil(height/3) % 2 == 0
+digutils2.forward()
 
-right()
+-- Optimisation to reduce turns
+if length > width then
+	left, right = right, left
+	width, length = length, width
+else
+	right()
+end
 
-for x=1, length do
+--- Digging a wall leaves you above starting point
+--- @type boolean
+local even_height = math.ceil(height/3) % 2 == 0
+
+--- The number of walls to dig is even
+--- @type boolean
+local even_length = length % 2 == 0
+
+--- @type boolean
+local same_final_side = xor(even_height, even_length)
+
+for x = 1, length do
 	wall()
-	local turn = (even or x%2==0) and right or left
+	local turn = (even_height or x % 2 == 0) and right or left
 	if x < length then
 		turn()
 		digutils2.forward()
 		turn()
 	else
-		((even or x%2==0) and left or right)()
+		if not same_final_side then
+			left()
+			left()
+			digutils2.forward(width)
+		end
+		left()
 		digutils2.forward(length)
 	end
 end
