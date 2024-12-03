@@ -37,18 +37,20 @@ local function layer(n)
 			turn()
 		end
 	end
-	digutils2.down()
+	if n > 1 then
+		digutils2.down()
+	end
 end
 
 for _ = 3, depth, 3 do
 	layer(3)
 	right()
 	if width % 2 == 0 then
-		forward[1](width)
+		forward[1](width-1)
 	end
 	right()
 end
 
 layer(depth % 3)
 
-digutils2.up(depth+1)
+digutils2.up(depth)
