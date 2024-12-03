@@ -15,13 +15,6 @@ if direction == "left" then
 	left, right = right, left
 end
 
---- @param a boolean
---- @param b boolean
---- @return boolean
-local function xor(a, b)
-	return (a or b) and not (a and b)
-end
-
 --- @type number
 local length = digutils2.ask("Length", "number")
 --- @type number
@@ -88,7 +81,10 @@ local even_height = math.ceil(height/3) % 2 == 0
 local even_length = length % 2 == 0
 
 --- @type boolean
-local same_final_side = xor(even_height, even_length)
+local same_final_side = even_height or even_length
+-- Note: This isn't an xor:
+-- When the height is "even", the turtle is back at x=0 after
+-- every wall.
 
 for x = 1, length do
 	wall()
