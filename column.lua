@@ -19,7 +19,7 @@ local function itemCount(items)
 end
 
 local function checkBlocks(targetHeight, descend)
-	local needed = (targetHeight * 2 * (width + depth - 1))
+	local needed = (targetHeight * 2 * (width + depth - 2))
 
 	if count() < needed then
 		if descend then
