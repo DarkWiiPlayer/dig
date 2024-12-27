@@ -21,6 +21,7 @@ local Item = setmetatable({}, {__call = function(self, init)
 			error("No item in current slot")
 		end
 	end
+	init.count = nil
 
 	--- @cast self table
 	return setmetatable(init, self)
