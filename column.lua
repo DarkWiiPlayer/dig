@@ -1,7 +1,6 @@
 local digutils2 = require 'digutils2'
 
-local select = digutils2.rememberItem()
-local count = digutils2.itemCounter()
+local item = digutils2.item()
 
 local width = digutils2.ask("Width", "number")
 local depth = digutils2.ask("Depth", "number", width)
@@ -21,7 +20,7 @@ end
 local function checkBlocks(targetHeight, descend)
 	local needed = (targetHeight * 2 * (width + depth - 2))
 
-	if count() < needed then
+	if item:count() < needed then
 		if descend then
 			digutils2.down(targetHeight)
 		end
@@ -52,12 +51,12 @@ local function column()
 
 	for _ = 2, height do
 		turtle.down()
-		select()
+		item:select()
 		turtle.placeUp()
 	end
 
 	turtle.back()
-	select()
+	item:select()
 	turtle.place()
 end
 

@@ -1,5 +1,66 @@
 local digutils2 = {}
 
+--- @class Item
+--- @field name string
+--- @overload fun(init: string|{name: string}|nil):Item
+local Item = setmetatable({}, {__call = function(self, init)
+	if type(init) == "table" then
+		if not init.name then
+			error("Item must have a name")
+		end
+	elseif type(init) == "string" then
+		init = {name = init}
+	elseif type(init) == "number" and (1 <= init) and (init <= 16) then
+		init = turtle.getItemDetail(init)
+		if not init then
+			error("No item in current slot")
+		end
+	else
+		init = turtle.getItemDetail()
+		if not init then
+			error("No item in current slot")
+		end
+	end
+
+	--- @cast self table
+	return setmetatable(init, self)
+end})
+Item.__index = Item
+
+function Item:match(detail)
+	return detail and (self.name == detail.name)
+end
+
+--- Counts how many items of this type are in the inventory
+--- @return number
+function Item:count()
+	local count = 0
+	for i = 1, 16 do
+		local detail = turtle.getItemDetail(i)
+		if detail and self:match(detail) then
+			count = count + detail.count
+		end
+	end
+	return count
+end
+
+--- Tries to select this type of item in the inventory
+function Item:select()
+	local item = turtle.getItemDetail()
+	if not (item and item.name == self.name) then
+		for number = 1, 16 do
+			local current = turtle.getItemDetail()
+			if current and current.name == self.name then
+				turtle.select(number)
+				return true
+			end
+		end
+		return nil, "Could not find item in inventory: " .. self.name
+	end
+end
+
+digutils2.item = Item
+
 local function match(detail, pattern, exact)
 	if type(pattern) == "table" then
 		return pattern[detail.name] and true or false
@@ -145,16 +206,13 @@ function digutils2.refuel()
 	error("Not enough fuel!")
 end
 
+local torch = Item("minecraft:torch")
+
 --- Tries placing down a torch at the current position.
 -- If there are no torches in the inventory, nothing happens.
 function digutils2.torchDown()
-	for i=1,16 do
-		local info = turtle.getItemDetail(i)
-		if info and info.name == "minecraft:torch" then
-			turtle.select(i)
-			turtle.placeDown()
-			return
-		end
+	if torch:select() then
+		turtle.placeDown()
 	end
 end
 
@@ -223,56 +281,6 @@ function digutils2.ask(prompt, t, default)
 			print "Please enter a valid number!"
 			return digutils2.ask(prompt, t)
 		end
-	end
-end
-
---- @param slot number|nil
-function digutils2.rememberItem(slot)
-	local target = turtle.getItemDetail(slot)
-	if not target then
-		error("No item in active slot")
-	end
-	return function()
-		local item = turtle.getItemDetail()
-		if not (item and item.name == target.name) then
-			for number = 1, 16 do
-				local current = turtle.getItemDetail()
-				if current and current.name == target.name then
-					turtle.select(number)
-					return
-				end
-			end
-			error("Could not find item in inventory: "..target.name)
-		end
-	end
-end
-
---- @param item number|string|nil
-function digutils2.itemCounter(item)
-	if item == nil then
-		local info = turtle.getItemDetail()
-		if not info then
-			error("No item in current slot")
-		end
-		item = info.name
-	elseif tonumber(item) then
-		local info = turtle.getItemDetail(tonumber(item))
-		if not info then
-			error("No item in slot "..tostring(item))
-		end
-		item = info.name
-	end
-
-	--- @return number
-	return function()
-		local count = 0
-		for i = 1, 16 do
-			local detail = turtle.getItemDetail(i)
-			if (detail and detail.name == item) then
-				count = count + detail.count
-			end
-		end
-		return count
 	end
 end
 
