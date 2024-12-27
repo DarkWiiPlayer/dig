@@ -61,8 +61,8 @@ local function column()
 			turtle.up()
 			turtle.placeDown()
 		end
-		up = not up
 	end
+	up = not up
 
 	turtle.back()
 	item:select()
