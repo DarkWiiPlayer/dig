@@ -5,6 +5,7 @@ local count = digutils2.itemCounter()
 
 local width = digutils2.ask("Width", "number")
 local depth = digutils2.ask("Depth", "number", width)
+local height = digutils2.ask("Height", "number", "auto")
 
 local function itemCount(items)
 	local stacks, rem = math.floor(items / 64), items % 64
@@ -17,28 +18,37 @@ local function itemCount(items)
 	end
 end
 
-local function checkBlocks(height)
-	local needed = (height * 2 * (width + depth - 1))
+local function checkBlocks(targetHeight, descend)
+	local needed = (targetHeight * 2 * (width + depth - 1))
 
 	if count() < needed then
-		digutils2.down(height)
+		if descend then
+			digutils2.down(targetHeight)
+		end
 		error("Not enouhg blocks: need at least " .. itemCount(needed))
 	end
 
 	checkBlocks = function() end
 end
 
-local function column()
-	local height = 0
-
-	while turtle.up() do
-		height = height + 1
-		if height >= 100 then
-			break
-		end
-	end
-
+if height ~= "auto" then
 	checkBlocks(height)
+end
+
+local function column()
+	if height == "auto" then
+		height = 0
+		while turtle.up() do
+			height = height + 1
+			if height >= 100 then
+				break
+			end
+		end
+
+		checkBlocks(height, true)
+	else
+		digutils2.up(height)
+	end
 
 	for _ = 1, height do
 		turtle.down()
