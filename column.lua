@@ -6,12 +6,23 @@ local count = digutils2.itemCounter()
 local width = digutils2.ask("Width", "number")
 local depth = digutils2.ask("Depth", "number", width)
 
+local function itemCount(items)
+	local stacks, rem = math.floor(items / 64), items % 64
+	if stacks < 1 then
+		return tostring(items)
+	elseif rem == 0 then
+		return string.format("%i (%i stack(s))", items, stacks)
+	else
+		return string.format("%i (%i stack(s) and %i items)", items, stacks, rem)
+	end
+end
+
 local function checkBlocks(height)
 	local needed = (height * 2 * (width + depth - 1))
 
 	if count() < needed then
 		digutils2.down(height)
-		error("Not enouhg blocks: need at least " .. tostring(needed))
+		error("Not enouhg blocks: need at least " .. itemCount(needed))
 	end
 
 	checkBlocks = function() end
