@@ -37,7 +37,7 @@ end
 
 local function column()
 	if height == "auto" then
-		height = 0
+		height = 1
 		while turtle.up() do
 			height = height + 1
 			if height >= 100 then
@@ -47,10 +47,10 @@ local function column()
 
 		checkBlocks(height, true)
 	else
-		digutils2.up(height)
+		digutils2.up(height - 1)
 	end
 
-	for _ = 1, height do
+	for _ = 2, height do
 		turtle.down()
 		select()
 		turtle.placeUp()
