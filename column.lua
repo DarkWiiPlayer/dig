@@ -2,6 +2,10 @@ local digutils2 = require 'digutils2'
 
 local item = digutils2.item()
 
+--- Whether the turtle is at the top or bottom of the column
+--- @type boolean
+local up = false
+
 local width = digutils2.ask("Width", "number")
 local depth = digutils2.ask("Depth", "number", width)
 local height = digutils2.ask("Height", "number", "auto")
@@ -44,15 +48,20 @@ local function column()
 			end
 		end
 
+		up = true
 		checkBlocks(height, true)
-	else
-		digutils2.up(height - 1)
 	end
 
 	for _ = 2, height do
-		turtle.down()
 		item:select()
-		turtle.placeUp()
+		if up then
+			turtle.down()
+			turtle.placeUp()
+		else
+			turtle.up()
+			turtle.placeDown()
+		end
+		up = not up
 	end
 
 	turtle.back()
@@ -78,7 +87,11 @@ if (width > 1) and (depth > 1) then
 	wall(depth - 1, turtle.turnRight)
 	wall(width - 1, turtle.turnRight)
 	wall(depth - 1, turtle.turnRight)
-	wall(width -1, turtle.turnLeft)
+	wall(width - 1, turtle.turnLeft)
+
+	if up then
+		digutils2.down(height - 1)
+	end
 else
 	error("NYI: Both dimensions must be > 1")
 end
