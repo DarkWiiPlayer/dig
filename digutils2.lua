@@ -48,7 +48,9 @@ end
 --- Tries to select this type of item in the inventory
 function Item:select()
 	local item = turtle.getItemDetail()
-	if not (item and item.name == self.name) then
+	if item and item.name == self.name then
+		return true
+	else
 		for number = 1, 16 do
 			local current = turtle.getItemDetail(number)
 			if current and current.name == self.name then
