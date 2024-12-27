@@ -69,7 +69,7 @@ local function wall(length, turn)
 	end
 end
 
-if (width > 2) and (depth > 2) then
+if (width > 1) and (depth > 1) then
 	turtle.forward()
 	turtle.forward()
 	turtle.turnLeft()
@@ -80,5 +80,5 @@ if (width > 2) and (depth > 2) then
 	wall(depth - 1, turtle.turnRight)
 	wall(width -1, turtle.turnLeft)
 else
-	error("NYI: Both dimensions must be > 2")
+	error("NYI: Both dimensions must be > 1")
 end
