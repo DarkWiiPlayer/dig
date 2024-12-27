@@ -42,8 +42,8 @@ if (width > 2) and (length > 2) then
 	turtle.turnLeft()
 
 	wall(length - 1, turtle.turnRight())
-	wall(width, turtle.turnRight())
-	wall(length, turtle.turnRight())
+	wall(width - 1, turtle.turnRight())
+	wall(length - 1, turtle.turnRight())
 	wall(width -1, turtle.turnLeft())
 else
 	error("NYI: Both dimensions must be > 2")
