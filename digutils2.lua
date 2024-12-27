@@ -199,9 +199,18 @@ function digutils2.compact()
 	digutils2.each(compact)
 end
 
-function digutils2.ask(prompt, t)
-	io.write(prompt, ": ")
+function digutils2.ask(prompt, t, default)
+	if default then
+		io.write(("%s [%s]: "):format(prompt, tostring(default)))
+	else
+		io.write(prompt, ": ")
+	end
 	local input = io.read()
+
+	if default and input == "" then
+		return default
+	end
+
 	if t == nil then
 		return input
 	elseif t == "string" then
@@ -214,6 +223,56 @@ function digutils2.ask(prompt, t)
 			print "Please enter a valid number!"
 			return digutils2.ask(prompt, t)
 		end
+	end
+end
+
+--- @param slot number|nil
+function digutils2.rememberItem(slot)
+	local target = turtle.getItemDetail(slot)
+	if not target then
+		error("No item in active slot")
+	end
+	return function()
+		local item = turtle.getItemDetail()
+		if not (item and item.name == target.name) then
+			for number = 1, 16 do
+				local current = turtle.getItemDetail()
+				if current and current.name == target.name then
+					turtle.select(number)
+					return
+				end
+			end
+			error("Could not find item in inventory: "..target.name)
+		end
+	end
+end
+
+--- @param item number|string|nil
+function digutils2.itemCounter(item)
+	if item == nil then
+		local info = turtle.getItemDetail()
+		if not info then
+			error("No item in current slot")
+		end
+		item = info.name
+	elseif tonumber(item) then
+		local info = turtle.getItemDetail(tonumber(item))
+		if not info then
+			error("No item in slot "..tostring(item))
+		end
+		item = info.name
+	end
+
+	--- @return number
+	return function()
+		local count = 0
+		for i = 1, 16 do
+			local detail = turtle.getItemDetail(i)
+			if (detail and detail.name == item) then
+				count = count + detail.count
+			end
+		end
+		return count
 	end
 end
 
