@@ -50,7 +50,7 @@ function Item:select()
 	local item = turtle.getItemDetail()
 	if not (item and item.name == self.name) then
 		for number = 1, 16 do
-			local current = turtle.getItemDetail()
+			local current = turtle.getItemDetail(number)
 			if current and current.name == self.name then
 				turtle.select(number)
 				return true
