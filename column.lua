@@ -22,7 +22,7 @@ local function checkBlocks(targetHeight, descend)
 
 	if item:count() < needed then
 		if descend then
-			digutils2.down(targetHeight)
+			digutils2.down(targetHeight - 1)
 		end
 		error("Not enouhg blocks: need at least " .. itemCount(needed))
 	end
