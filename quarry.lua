@@ -1,13 +1,22 @@
 local digutils2 = require 'digutils2'
 local junk = require 'junk'
 
-local direction = ...
+local args = {...}
 
 local left = turtle.turnLeft
 local right = turtle.turnRight
 
-if direction == "left" then
-	left, right = right, left
+local up = digutils2.up
+local down = digutils2.down
+
+for _, arg in ipairs(args) do
+	if arg == "left" then
+		left, right = right, left
+	end
+
+	if arg == "up" then
+		up, down = down, up
+	end
 end
 
 local length = digutils2.ask("Length", "number")
@@ -27,7 +36,7 @@ end)
 
 local function layer(n)
 	if n < 1 then return end
-	digutils2.down(n==3 and 2 or 1)
+	down(n==3 and 2 or 1)
 	for y=1, width do
 		forward[n](length-1, inventory)
 		if y < width then
@@ -38,7 +47,7 @@ local function layer(n)
 		end
 	end
 	if n > 1 then
-		digutils2.down()
+		down()
 	end
 end
 
@@ -53,4 +62,4 @@ end
 
 layer(depth % 3)
 
-digutils2.up(depth)
+up(depth)
