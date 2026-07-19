@@ -46,7 +46,8 @@ function Item:count()
 end
 
 --- Tries to select this type of item in the inventory
-function Item:select()
+--- @param ask boolean Whether to ask for more blocks instead of erroring
+function Item:select(ask)
 	local item = turtle.getItemDetail()
 	if item and item.name == self.name then
 		return true
@@ -58,7 +59,14 @@ function Item:select()
 				return true
 			end
 		end
-		return nil, "Could not find item in inventory: " .. self.name
+		if ask then
+			digutils2.printf("Can't find %s in inventory, please provide and hit [ENTER]")
+			if io.read() then
+				return self:select(ask)
+			end
+		else
+			return nil, "Could not find item in inventory: " .. self.name
+		end
 	end
 end
 
@@ -214,7 +222,24 @@ local torch = Item("minecraft:torch")
 --- Tries placing down a torch at the current position.
 -- If there are no torches in the inventory, nothing happens.
 function digutils2.torchDown()
-	if torch:select() then
+	if torch:select(false) then
+		turtle.placeDown()
+	end
+end
+
+--- Replaces the block below with the currently selected block
+--- @param skipair boolean Skip air blocks as well as target blocks
+function digutils2.replaceDown(skipair)
+	local replace = true
+	local block, info = turtle.inspectDown()
+	if block then
+		replace = info.name ~= turtle.getItemDetail()
+	else
+		replace = not skipair
+	end
+
+	if replace then
+		turtle.digDown()
 		turtle.placeDown()
 	end
 end

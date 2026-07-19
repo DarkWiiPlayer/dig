@@ -5,9 +5,8 @@ local item = digutils2.item()
 local a, b
 
 local function place()
-	turtle.digDown()
-	item:select()
-	turtle.placeDown()
+	item:select(true)
+	digutils2.replaceDown(false)
 end
 
 local function measure()
@@ -16,6 +15,7 @@ local function measure()
 		n = n + 1
 		place()
 	end
+	return n
 end
 
 local function line(n)
@@ -37,6 +37,7 @@ local needed = (a-1) * (b-1)
 local count = item:count()
 if count < needed then
 	digutils2.printf("Not enough items, need %i but only found %i", needed, count)
+	print("Press [ENTER] to continue")
 	local _ = io.read()
 end
 
