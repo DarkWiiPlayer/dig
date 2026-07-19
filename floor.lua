@@ -32,6 +32,14 @@ turtle.turnRight()
 a = measure()
 turtle.turnRight()
 
+local needed = (a-1) * (b-1)
+
+local count = item:count()
+if count < needed then
+	digutils2.printf("Not enough items, need %i but only found %i", needed, count)
+	local _ = io.read()
+end
+
 while b > 1 do
 	a, b = b - 1, a
 	line(a)

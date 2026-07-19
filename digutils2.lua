@@ -287,4 +287,8 @@ function digutils2.ask(prompt, t, default)
 	end
 end
 
+function digutils2.printf(format, ...)
+	print(format:format(...))
+end
+
 return digutils2
