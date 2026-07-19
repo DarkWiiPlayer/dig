@@ -233,7 +233,7 @@ function digutils2.replaceDown(skipair)
 	local replace = true
 	local block, info = turtle.inspectDown()
 	if block then
-		replace = info.name ~= turtle.getItemDetail()
+		replace = info.name ~= turtle.getItemDetail().name
 	else
 		replace = not skipair
 	end
