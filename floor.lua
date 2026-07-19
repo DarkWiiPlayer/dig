@@ -1,0 +1,38 @@
+local digutils2 = require 'digutils2'
+
+local item = digutils2.item()
+
+local a, b
+
+local function place()
+	turtle.digDown()
+	item:select()
+	turtle.placeDown()
+end
+
+local function measure()
+	local n = 1
+	while turtle.forward() do
+		n = n + 1
+		place()
+	end
+end
+
+local function line(n)
+	for _ = 1, n do
+		digutils2.forward(1)
+		place()
+	end
+end
+
+place()
+
+b = measure()
+turtle.turnRight()
+a = measure()
+turtle.turnRight()
+
+while b > 1 do
+	a, b = b - 1, a
+	line(a)
+end
