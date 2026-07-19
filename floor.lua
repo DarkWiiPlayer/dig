@@ -29,10 +29,10 @@ place()
 
 b = measure()
 turtle.turnRight()
-a = measure()
+a = measure() - 1
 turtle.turnRight()
 
-local needed = (a-1) * (b-1)
+local needed = (a) * (b-1)
 
 local count = item:count()
 if count < needed then
