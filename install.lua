@@ -19,7 +19,7 @@ local function moduleuri(module)
 end
 
 local function get(uri, file)
-	print("Installing "..file..".lua")
+	print("Installing "..file)
 	local response, reason = http.get(uri)
 	if response then
 		local out = assert(io.open(file, "w"))
