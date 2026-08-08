@@ -1,8 +1,6 @@
 local digutils2 = require 'digutils2'
 local junk = require 'junk'
 
-local direction = ...
-
 --- Turns 90 degrees to the left
 --- @type fun()
 local left = turtle.turnLeft
@@ -11,8 +9,19 @@ local left = turtle.turnLeft
 --- @type fun()
 local right = turtle.turnRight
 
-if direction == "left" then
-	left, right = right, left
+local up = digutils2.up
+local down = digutils2.down
+
+local args = {...}
+
+for _, arg in ipairs(args) do
+	if arg == "left" then
+		left, right = right, left
+	end
+
+	if arg == "up" then
+		up, down = down, up
+	end
 end
 
 --- @type number
@@ -40,10 +49,10 @@ end)
 
 local function wall()
 	for z=3, height, 3 do
-		digutils2.up()
+		up()
 		forward[3](width-1, inventory)
 		if z < height then
-			digutils2.up(2, inventory)
+			up(2, inventory)
 		end
 		if z < height then
 			right() right()
@@ -51,10 +60,10 @@ local function wall()
 	end
 	local rem = height % 3
 	if rem > 0 then
-		digutils2.up(rem-1)
+		up(rem-1)
 		forward[rem](width-1, inventory)
 	end
-	digutils2.down(stopheight-1)
+	down(stopheight-1)
 end
 
 digutils2.forward()
