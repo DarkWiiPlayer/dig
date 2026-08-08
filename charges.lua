@@ -1,4 +1,4 @@
-local digutils2 = require "dig/digutils2"
+local digutils2 = require "digutils2"
 
 local direction = digutils2.ask("Direction?", "string", "forward")
 local length = digutils2.ask("Length", "number")
