@@ -14,6 +14,13 @@ local down = digutils2.down
 
 local args = {...}
 
+--- @type fun(distance: number|nil, callback: fun()|nil)[]
+local forward = {
+	digutils2.forward,
+	digutils2.forward2d,
+	digutils2.forward3
+}
+
 for _, arg in ipairs(args) do
 	if arg == "left" then
 		left, right = right, left
@@ -21,6 +28,7 @@ for _, arg in ipairs(args) do
 
 	if arg == "down" then
 		up, down = down, up
+		forward[2] = digutils2.forward2u
 	end
 end
 
@@ -30,13 +38,6 @@ local length = tonumber(digutils2.ask("Length", "number")) or error("Number expe
 local width = tonumber(digutils2.ask("Width", "number")) or error("Number expected")
 --- @type number
 local height = tonumber(digutils2.ask("Height", "number")) or error("Number expected")
-
---- @type fun(distance: number|nil, callback: fun()|nil)[]
-local forward = {
-	digutils2.forward,
-	digutils2.forward2d,
-	digutils2.forward3
-}
 
 --- What height the turtle will be at after finishing a layer
 --- @type number
