@@ -16,11 +16,11 @@ if direction == "left" then
 end
 
 --- @type number
-local length = digutils2.ask("Length", "number")
+local length = tonumber(digutils2.ask("Length", "number")) or error("Number expected")
 --- @type number
-local width = digutils2.ask("Width", "number")
+local width = tonumber(digutils2.ask("Width", "number")) or error("Number expected")
 --- @type number
-local height = digutils2.ask("Height", "number")
+local height = tonumber(digutils2.ask("Height", "number")) or error("Number expected")
 
 --- @type fun(distance: number|nil, callback: fun()|nil)[]
 local forward = {
