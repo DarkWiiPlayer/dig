@@ -19,7 +19,7 @@ for _, arg in ipairs(args) do
 		left, right = right, left
 	end
 
-	if arg == "up" then
+	if arg == "down" then
 		up, down = down, up
 	end
 end
